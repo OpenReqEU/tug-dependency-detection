@@ -5,6 +5,7 @@ import json
 import os
 import csv
 import functools
+import itertools
 from application.models.requirement import Requirement  # noqa: E501
 from application.entities import requirement
 from application.preprocessing import preprocessing
@@ -71,16 +72,25 @@ def recommend_requirement_dependencies(body):  # noqa: E501
             k = 1
 
         predictions_map = svd.svd(requs, k=k, min_distance=min_distance, max_distance=max_distance)
-        for subject_requirement, similar_requirements in predictions_map.items():
+        dependency_pairs = set()
+        for subject_requirement, dependent_requirements in predictions_map.items():
             requ = Requirement.from_dict({
                 "id": subject_requirement.id,
                 "title": subject_requirement.title,
                 "description": subject_requirement.description
             })
-            requ.predictions = list(set(map(lambda r: r.id, similar_requirements)))
+            rx = subject_requirement.id
+            dependent_requirement_ids = list(set(map(lambda r: r.id, dependent_requirements)))
+            all_undirected_pairs_of_subject_requirement = map(lambda ry: [(rx, ry), (ry, rx)], dependent_requirement_ids)
+            dependency_pairs_of_subject_requirement = set(list(itertools.chain(*all_undirected_pairs_of_subject_requirement)))
+            remaining_dependency_pairs_of_subject_requirement = dependency_pairs_of_subject_requirement - dependency_pairs
+            dependency_pairs = dependency_pairs.union(remaining_dependency_pairs_of_subject_requirement)
+            predictions = list(set(map(lambda t: t[0] if t[0] != rx else t[1], remaining_dependency_pairs_of_subject_requirement)))
+
+            requ.predictions = predictions
             response_list += [requ]
-            for similar_requirement in similar_requirements:
-                print("{} -> {}".format(subject_requirement, similar_requirement))
+            for dependent_requirement in dependent_requirements:
+                print("{} -> {}".format(subject_requirement, dependent_requirement))
 
         """
         for idx, requ in enumerate(requirements):
