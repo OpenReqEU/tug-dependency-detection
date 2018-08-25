@@ -53,22 +53,22 @@ def recommend_requirement_dependencies(body):  # noqa: E501
         _logger.info("SVD...")
 
         if len(requs) > 100:
-            min_distance, max_distance = 0.2, 0.4
+            min_distance, max_distance = 0.2, 0.5
             k = 10
         elif len(requs) > 50:
-            min_distance, max_distance = 0.2, 0.5
+            min_distance, max_distance = 0.2, 0.6
             k = 8
         elif len(requs) > 30:
-            min_distance, max_distance = 0.2, 0.55
+            min_distance, max_distance = 0.2, 0.65
             k = 5
         elif len(requs) > 10:
-            min_distance, max_distance = 0.2, 0.6
+            min_distance, max_distance = 0.2, 0.7
             k = 3
         elif len(requs) > 5:
-            min_distance, max_distance = 0.2, 0.6
+            min_distance, max_distance = 0.2, 0.75
             k = 2
         else:
-            min_distance, max_distance = 0.2, 0.6
+            min_distance, max_distance = 0.2, 0.8
             k = 1
 
         predictions_map = svd.svd(requs, k=k, min_distance=min_distance, max_distance=max_distance)
