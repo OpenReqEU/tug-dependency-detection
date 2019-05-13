@@ -68,6 +68,8 @@ The Swagger definition lives here:
 http://217.172.12.199:9007/v1/swagger.json
 ```
 
+[Rendered Documentation](https://api.openreq.eu/#/services/tug-dependency-detection)
+
 ### Notes for developers
 None.
 
