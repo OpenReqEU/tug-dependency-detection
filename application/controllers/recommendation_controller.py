@@ -43,8 +43,6 @@ def recommend_requirement_dependencies(body):  # noqa: E501
             r.append_comments_to_description()
 
         requs = preprocessing.preprocess_requirements(requs,
-                                                      enable_pos_tagging=False,
-                                                      enable_lemmatization=False,
                                                       enable_stemming=False,
                                                       lang=lang)
 
