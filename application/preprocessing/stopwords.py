@@ -6,7 +6,6 @@ from application.util import helper
 
 
 _logger = logging.getLogger(__name__)
-nltk.data.path = [os.path.join(helper.APP_PATH, "corpora", "nltk_data")]
 
 
 def remove_stopwords(requirements, lang="en"):
